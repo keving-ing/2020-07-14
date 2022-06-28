@@ -5,6 +5,8 @@
 package it.polito.tdp.PremierLeague;
 
 import java.net.URL;
+import java.util.List;
+import java.util.Map;
 import java.util.ResourceBundle;
 
 import it.polito.tdp.PremierLeague.model.Model;
@@ -53,18 +55,19 @@ public class FXMLController {
     	txtResult.setText("SQUADRE PEGGIORI:\n");
     	if(cmbSquadra.getValue() != null)
     	{
-    		for(Team t:model.getPeggiori(cmbSquadra.getValue()))
+    		List<Team> peggiori = model.getPeggiori(cmbSquadra.getValue()); 
+    		for(Team i:peggiori)
     		{
-    			txtResult.appendText(t+"\n");
+    			txtResult.appendText(i+"("+ (cmbSquadra.getValue().getPunteggio() - i.getPunteggio()) + ")\n");
     		}
     	}
     	
-    	txtResult.appendText("SQUADRE MIGLIORI:\n");
+    	txtResult.appendText("\nSQUADRE MIGLIORI:\n");
     	if(cmbSquadra.getValue() != null)
     	{
     		for(Team t:model.getMigliori())
     		{
-    			txtResult.appendText(t+"\n");
+    			txtResult.appendText(t+"("+ (t.getPunteggio() - cmbSquadra.getValue().getPunteggio()) + ")\n");
     		}
     	}
 

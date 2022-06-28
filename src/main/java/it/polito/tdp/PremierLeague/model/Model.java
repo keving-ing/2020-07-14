@@ -1,12 +1,16 @@
 package it.polito.tdp.PremierLeague.model;
 
 import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import org.jgrapht.Graph;
 import org.jgrapht.Graphs;
 import org.jgrapht.graph.DefaultWeightedEdge;
+import org.jgrapht.graph.SimpleDirectedWeightedGraph;
 import org.jgrapht.graph.SimpleWeightedGraph;
 
 import it.polito.tdp.PremierLeague.db.PremierLeagueDAO;
@@ -25,7 +29,7 @@ public class Model {
 	
 	public String creaGrafo()
 	{
-		grafo = new SimpleWeightedGraph<Team, DefaultWeightedEdge>(DefaultWeightedEdge.class);
+		grafo = new SimpleDirectedWeightedGraph<Team, DefaultWeightedEdge>(DefaultWeightedEdge.class);
 		
 		vertici = dao.listAllTeams();
 		Graphs.addAllVertices(grafo, vertici);
@@ -98,30 +102,20 @@ public class Model {
 	
 	public List<Team> getPeggiori(Team t)
 	{
-		List<Team> peggiori = new LinkedList<Team>();
-		boolean flag = false;
+		List<Team> peggiori = Graphs.successorListOf(grafo, t);
+		migliori = Graphs.predecessorListOf(grafo, t);
 		
-		for(Team t1:vertici)
-		{
-			if(t1.equals(t))
-			{
-				flag = true;
-			}
-			
-			if(flag == true)
-			{
-				peggiori.add(t1);
-			}
-			
-			if(flag == false)
-			{
-				migliori.add(t1);
-			}
-		}
 		return peggiori;
 	}
 
 	public List<Team> getMigliori() {
+		
+		Collections.sort(migliori, new Comparator<Team>() {
+            @Override
+            public int compare(Team m1, Team m2) {
+                return (m1.punteggio - m2.punteggio);
+            }
+        });
 		return migliori;
 	}
 	
