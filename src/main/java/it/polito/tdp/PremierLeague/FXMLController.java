@@ -8,6 +8,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 import it.polito.tdp.PremierLeague.model.Model;
+import it.polito.tdp.PremierLeague.model.Team;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -35,7 +36,7 @@ public class FXMLController {
     private Button btnSimula; // Value injected by FXMLLoader
 
     @FXML // fx:id="cmbSquadra"
-    private ComboBox<?> cmbSquadra; // Value injected by FXMLLoader
+    private ComboBox<Team> cmbSquadra; // Value injected by FXMLLoader
 
     @FXML // fx:id="txtN"
     private TextField txtN; // Value injected by FXMLLoader
@@ -48,11 +49,32 @@ public class FXMLController {
 
     @FXML
     void doClassifica(ActionEvent event) {
+    	
+    	txtResult.setText("SQUADRE PEGGIORI:\n");
+    	if(cmbSquadra.getValue() != null)
+    	{
+    		for(Team t:model.getPeggiori(cmbSquadra.getValue()))
+    		{
+    			txtResult.appendText(t+"\n");
+    		}
+    	}
+    	
+    	txtResult.appendText("SQUADRE MIGLIORI:\n");
+    	if(cmbSquadra.getValue() != null)
+    	{
+    		for(Team t:model.getMigliori())
+    		{
+    			txtResult.appendText(t+"\n");
+    		}
+    	}
 
     }
 
     @FXML
     void doCreaGrafo(ActionEvent event) {
+    	
+    	txtResult.appendText(model.creaGrafo());
+    	this.cmbSquadra.getItems().addAll(model.getVertici());
 
     }
 
